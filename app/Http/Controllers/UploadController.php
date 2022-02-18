@@ -18,8 +18,11 @@ class UploadController extends Controller
             'fileSize' => $file->getSize()
         ];
 
-        $result = Storage::putFileAs('directory', $file, $file->hashName());
-
-        return $result;
+        $result = Storage::disk('s3')->putFileAs('directory', $file, $file->hashName());
+        $url = Storage::disk('s3')->url($result);
+        // return [
+        //     $result, $url
+        // ];
+        return Storage::disk('s3')->download($url);
     }
 }
